@@ -106,14 +106,14 @@ pub fn config_id_to_index(id: &str) -> Result<usize, anyhow::Error> {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct RepositoryConfig {
     pub git_url: String,
-    id: String,
+    dir_name: String,
 }
 
 impl RepositoryConfig {
-    pub fn new<T: Into<String>, S: Into<String>>(git_url: T, id: S) -> Self {
+    pub fn new<T: Into<String>>(git_url: T, kind: &str, id: &str) -> Self {
         Self {
             git_url: git_url.into(),
-            id: id.into()
+            dir_name: format!("{kind}_{id}")
         }
     }
 
@@ -142,7 +142,7 @@ impl RepositoryConfig {
     }
 
     pub fn dir_name(&self) -> String {
-        sanitize_name(&self.id)
+        sanitize_name(&self.dir_name)
     }
 
     pub fn is_local_dir(&self) -> bool {
